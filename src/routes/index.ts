@@ -1,13 +1,11 @@
-import { Buffer } from 'buffer'
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs'
 import path from 'path'
-import crypto from 'crypto'
 import { Hono } from 'hono'
-import { env, getRuntimeKey } from 'hono/adapter'
-import { R2Bucket, D1Database } from '@cloudflare/workers-types'
+import { getRuntimeKey } from 'hono/adapter'
 import { inflate } from 'pako'
 import CryptoJS from 'crypto-js'
 import { Bindings } from '../types'
+import logger from '@/middlewares/logger'
 
 const runtime = getRuntimeKey()
 let dataDir: string
@@ -38,14 +36,16 @@ app.post('/update', async (c) => {
     }
 
     if (runtime === 'workerd') {
-        // 如果是 Cloudflare Workers，存储到 D1 数据库
-        const db = c.env.DB
+        // 如果是 Cloudflare Workers，存储到 R2
+        const r2 = c.env.R2
+        if (!r2) {
+            logger.error('R2 binding is undefined')
+            return c.text('Internal Server Error', 500)
+        }
         const content = JSON.stringify({ encrypted })
 
         try {
-            await db.prepare('INSERT INTO cookie_data (uuid, content) VALUES (?, ?) ON CONFLICT(uuid) DO UPDATE SET content = ?')
-                .bind(uuid, content, content)
-                .run()
+            await r2.put(uuid, content)
             return c.json({ action: 'done' })
         } catch (error) {
             console.error(error)
@@ -72,19 +72,19 @@ app.all('/get/:uuid', async (c) => {
     }
 
     if (runtime === 'workerd') {
-        // 如果是 Cloudflare Workers，从 D1 数据库读取数据
-        const db = c.env.DB
-
+        // 如果是 Cloudflare Workers，存储到 R2
+        const r2 = c.env.R2
+        if (!r2) {
+            logger.error('R2 binding is undefined')
+            return c.text('Internal Server Error', 500)
+        }
         try {
-            const results = await db.prepare('SELECT content FROM cookie_data WHERE uuid = ?')
-                .bind(uuid)
-                .first()
-
-            if (!results) {
+            const object = await r2.get(uuid)
+            if (!object) {
                 return c.text('Not Found', 404)
             }
 
-            const data = JSON.parse(results.content as string)
+            const data = JSON.parse(await object.text())
 
             if (password) {
                 const decrypted = cookieDecrypt(uuid, data.encrypted, password)
