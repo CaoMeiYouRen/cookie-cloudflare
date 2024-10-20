@@ -17,7 +17,7 @@
 </p>
 
 
-> 基于 hono 实现的兼容 CookieCloud API 的云函数服务，支持 Cloudflare Workers 部署
+> 基于 hono 实现的兼容 [CookieCloud](https://github.com/easychen/CookieCloud) API 的云函数服务，支持 [Cloudflare Workers](https://developers.cloudflare.com/workers/) 部署，数据文件存储到 [Cloudflare R2 Storage](https://developers.cloudflare.com/r2/)
 
 ## 🏠 主页
 

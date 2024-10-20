@@ -45,7 +45,11 @@ app.post('/update', async (c) => {
         const content = JSON.stringify({ encrypted })
 
         try {
-            await r2.put(uuid, content)
+            await r2.put(uuid, content, {
+                httpMetadata: {
+                    contentType: 'application/json', // 设置文件 Content-Type 为 application/json
+                },
+            })
             return c.json({ action: 'done' })
         } catch (error) {
             console.error(error)
@@ -72,7 +76,7 @@ app.all('/get/:uuid', async (c) => {
     }
 
     if (runtime === 'workerd') {
-        // 如果是 Cloudflare Workers，存储到 R2
+        // 如果是 Cloudflare Workers，从 R2 获取数据
         const r2 = c.env.R2
         if (!r2) {
             logger.error('R2 binding is undefined')
