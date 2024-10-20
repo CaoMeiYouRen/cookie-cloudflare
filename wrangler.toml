@@ -1,6 +1,6 @@
 name = "cookie-cloudflare"
-main = "src/app.ts"
-minify = false
+main = "dist/app.mjs"
+minify = true
 compatibility_date = "2024-10-20"
 compatibility_flags = ["nodejs_compat"]
 
@@ -16,8 +16,3 @@ minify = false
 [[env.dev.r2_buckets]]
 binding = "R2"
 bucket_name = "cookie-cloudflare"
-
-[env.production]
-# Production environment configuration
-main = "dist/app.mjs"
-minify = true
