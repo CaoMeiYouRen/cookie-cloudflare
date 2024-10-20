@@ -8,4 +8,4 @@ serve({
     port: PORT,
 })
 
-logger.info(`hono-template 启动成功，访问地址：http://localhost:${PORT}`)
+logger.info(`cookie-cloudflare 启动成功，访问地址：http://localhost:${PORT}`)

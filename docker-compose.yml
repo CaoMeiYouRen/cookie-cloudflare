@@ -2,10 +2,10 @@ version: "3"
 
 services:
   server:
-    build: .
-    # container_name: 'push-all-in-cloud'
+    container_name: 'cookie-cloudflare'
     # image: ${DOCKER_IMAGE:-caomeiyouren/push-all-in-cloud}
-    restart: always
+    build: .
+    restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
@@ -14,3 +14,4 @@ services:
       TZ: "Asia/Shanghai"
     volumes:
       - ./logs:/app/logs
+      - ./data:/app/data

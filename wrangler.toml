@@ -1,4 +1,4 @@
-name = "hono-template"
+name = "cookie-cloudflare"
 main = "src/app.ts"
 minify = false
 compatibility_date = "2024-10-20"
@@ -13,3 +13,9 @@ minify = false
 # Production environment configuration
 main = "dist/app.mjs"
 minify = true
+
+[[d1_databases]]
+# available in your Worker on env.DB
+binding = "DB"
+database_name = "${D1_DATABASE_NAME}"
+database_id = "${D1_DATABASE_ID}"

@@ -10,6 +10,6 @@ export const config = {
     },
 }
 
-logger.info('hono-template 云函数启动成功')
+logger.info('cookie-cloudflare 云函数启动成功')
 
 export default handle(app)

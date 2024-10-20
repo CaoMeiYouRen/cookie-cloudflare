@@ -40,3 +40,4 @@ temp
 .vercel
 .wrangler
 .dev.vars
+/data
