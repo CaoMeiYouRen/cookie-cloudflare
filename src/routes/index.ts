@@ -71,9 +71,9 @@ app.post('/update', async (c) => {
 app.on(['GET', 'POST'], '/get/:uuid', async (c) => {
     let body = {} as Record<string, string>
     const contentType = c.req.header('Content-Type')
-    if (contentType.includes('application/x-www-form-urlencoded')) {
+    if (contentType?.includes('application/x-www-form-urlencoded')) {
         body = await c.req.parseBody() as Record<string, string>
-    } else if (contentType.includes('application/json')) {
+    } else if (contentType?.includes('application/json')) {
         body = await c.req.json()
     }
     const { password } = body
