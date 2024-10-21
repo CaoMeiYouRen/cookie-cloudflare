@@ -69,7 +69,14 @@ app.post('/update', async (c) => {
 
 // 处理数据获取请求
 app.all('/get/:uuid', async (c) => {
-    const { password } = await c.req.json()
+    let body = {} as Record<string, string>
+    const contentType = c.req.header('Content-Type')
+    if (contentType === 'application/x-www-form-urlencoded') {
+        body = await c.req.parseBody() as Record<string, string>
+    } else if (contentType === 'application/json') {
+        body = await c.req.json()
+    }
+    const { password } = body
     const { uuid } = c.req.param()
     if (!uuid) {
         return c.text('Bad Request', 400)
@@ -127,5 +134,19 @@ function cookieDecrypt(uuid: string, encrypted: string, password: string) {
     const parsed = JSON.parse(decrypted)
     return parsed
 }
+
+// function cookieDecrypt(uuid: string, encrypted: string, password: string) {
+//     // 生成密钥
+//     const the_key = crypto.createHash('md5').update(`${uuid}-${password}`).digest('hex').substring(0, 16);
+
+//     // 解密
+//     const decipher = crypto.createDecipheriv('aes-128-ecb', Buffer.from(the_key, 'utf8'), '');
+//     let decrypted = decipher.update(encrypted, 'base64', 'utf8');
+//     decrypted += decipher.final('utf8');
+
+//     // 解析 JSON
+//     const parsed = JSON.parse(decrypted);
+//     return parsed;
+// }
 
 export default app
