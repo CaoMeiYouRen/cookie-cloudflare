@@ -6,8 +6,7 @@ import { logger as honoLogger } from 'hono/logger'
 import { LOG_LEVEL, LOGFILES } from '@/env'
 
 async function createLogger() {
-    const runtimeKey = getRuntimeKey()
-    if (process.env.RUNTIME_KEY === 'cloudflare-workers' || runtimeKey === 'workerd') {
+    if (process.env.RUNTIME_KEY === 'cloudflare-workers' || getRuntimeKey() === 'workerd') {
         return console
     }
     const logDir = path.resolve('logs')

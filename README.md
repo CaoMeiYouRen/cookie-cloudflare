@@ -29,22 +29,108 @@
 
 - node >=16
 
-## 🚀 安装
+## 🚀 部署
 
-```sh
-npm install
+### Cloudflare Workers 部署
+
+1. 创建 `Cloudflare R2 Storage` 
+
+请参考 [Get started](https://developers.cloudflare.com/r2/get-started/) 创建一个 `R2 bucket`
+
+在 `cookie-cloudflare` 中，默认的 `R2 bucket`名称是 `cookie-cloudflare`。
+
+2. 修改 `wrangler.toml` 配置文件。
+
+```toml
+name = "cookie-cloudflare"
+main = "dist/app.mjs"
+minify = true
+compatibility_date = "2024-10-20"
+compatibility_flags = ["nodejs_compat"]
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "cookie-cloudflare" # 修改此处的 bucket_name 为你创建的 R2 bucket 名称
 ```
 
-## 👨‍💻 使用
+3. 构建并部署到 `Cloudflare Workers`
 
 ```sh
-npm run start
+npm run build && npm run deploy:wrangler
 ```
+
+### Docker 镜像
+
+在通过 Docker 部署的情况下，`cookie-cloudflare` 和 `CookieCloud` 的实现是一样的，因此可以直接使用 `CookieCloud`。
+
+但如果你还是想通过 Docker 部署，请参考以下内容。
+
+支持两种注册表：
+
+- Docker Hub: [`caomeiyouren/cookie-cloudflare`](https://hub.docker.com/r/caomeiyouren/cookie-cloudflare)
+- GitHub: [`ghcr.io/caomeiyouren/cookie-cloudflare`](https://github.com/CaoMeiYouRen/cookie-cloudflare/pkgs/container/cookie-cloudflare)
+
+支持以下架构：
+
+- `linux/amd64`
+- `linux/arm64`
+
+有以下几种 tags：
+
+| Tag            | 描述     | 举例          |
+| :------------- | :------- | :------------ |
+| `latest`       | 最新     | `latest`      |
+| `{YYYY-MM-DD}` | 特定日期 | `2024-06-07`  |
+| `{sha-hash}`   | 特定提交 | `sha-0891338` |
+| `{version}`    | 特定版本 | `1.2.3`       |
+
+### Docker Compose 部署
+
+下载 [docker-compose.yml](https://github.com/CaoMeiYouRen/cookie-cloudflare/blob/master/docker-compose.yml)
+
+```sh
+wget https://raw.githubusercontent.com/CaoMeiYouRen/cookie-cloudflare/refs/heads/master/docker-compose.yml
+```
+
+检查有无需要修改的配置
+
+```sh
+vim docker-compose.yml  # 也可以是你喜欢的编辑器
+```
+启动
+
+```sh
+docker-compose up -d
+```
+
+在浏览器中打开 `http://{Server IP}:3000` 即可查看结果
+
+### Node.js 部署
+
+确保本地已安装 Node.js 和 pnpm。
+
+```sh
+# 下载源码
+git clone https://github.com/CaoMeiYouRen/cookie-cloudflare.git  --depth=1
+cd cookie-cloudflare
+# 安装依赖
+pnpm i --frozen-lockfile
+# 构建项目
+pnpm build
+# 启动项目
+pnpm start
+```
+
+在浏览器中打开 `http://{Server IP}:3000` 即可查看结果
+
+### Vercel 部署(暂不支持)
+
+暂不支持，如有需要，请提 issue。
 
 ## 🛠️ 开发
 
 ```sh
-npm run dev
+npm run dev:wrangler
 ```
 
 ## 🔧 编译

@@ -3,8 +3,8 @@ version: "3"
 services:
   server:
     container_name: 'cookie-cloudflare'
-    # image: ${DOCKER_IMAGE:-caomeiyouren/push-all-in-cloud}
-    build: .
+    image: ${DOCKER_IMAGE:-caomeiyouren/cookie-cloudflare}
+    # build: .
     restart: unless-stopped
     ports:
       - "3000:3000"
