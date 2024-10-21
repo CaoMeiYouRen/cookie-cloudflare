@@ -1,5 +1,12 @@
 # cookie-cloudflare
 
+## [1.0.3](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.0.2...v1.0.3) (2024-10-21)
+
+
+### 🐛 Bug 修复
+
+* 优化 /get/:uuid 路由支持的方法 ([6cc43da](https://github.com/CaoMeiYouRen/cookie-cloudflare/commit/6cc43da))
+
 ## [1.0.2](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.0.1...v1.0.2) (2024-10-21)
 
 
