@@ -16,3 +16,7 @@ minify = false
 [[env.dev.r2_buckets]]
 binding = "R2"
 bucket_name = "cookie-cloudflare"
+
+[observability]
+enabled = true
+head_sampling_rate = 1 # optional. default = 1.
