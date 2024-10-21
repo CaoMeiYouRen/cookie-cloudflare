@@ -1,5 +1,12 @@
 # cookie-cloudflare
 
+## [1.0.4](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.0.3...v1.0.4) (2024-10-21)
+
+
+### 🐛 Bug 修复
+
+* 修复 contentType 可能为 undefined 的问题 ([0e44a7f](https://github.com/CaoMeiYouRen/cookie-cloudflare/commit/0e44a7f))
+
 ## [1.0.3](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.0.2...v1.0.3) (2024-10-21)
 
 
