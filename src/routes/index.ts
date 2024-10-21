@@ -94,15 +94,14 @@ app.all('/get/:uuid', async (c) => {
             if (!object) {
                 return c.text('Not Found', 404)
             }
-
-            const data = JSON.parse(await object.text())
-
-            if (password) {
-                const decrypted = cookieDecrypt(uuid, data.encrypted, password)
-                return c.json(decrypted)
+            const dataText = await object.text()
+            if (!password) {
+                c.header('Content-Type', 'application/json')
+                return c.text(dataText)
             }
-            return c.json(data)
-
+            const data = JSON.parse(dataText)
+            const decrypted = cookieDecrypt(uuid, data.encrypted, password)
+            return c.json(decrypted)
         } catch (error) {
             console.error(error)
             return c.text('Internal Server Error', 500)
@@ -113,18 +112,17 @@ app.all('/get/:uuid', async (c) => {
     if (!existsSync(filePath)) {
         return c.text('Not Found', 404)
     }
-
-    const data = JSON.parse(readFileSync(filePath).toString())
-    if (!data) {
+    const dataText = readFileSync(filePath).toString()
+    if (!dataText) {
         return c.text('Internal Server Error', 500)
     }
-
-    if (password) {
-        const decrypted = cookieDecrypt(uuid, data.encrypted, password)
-        return c.json(decrypted)
+    if (!password) {
+        c.header('Content-Type', 'application/json')
+        return c.text(dataText)
     }
-    return c.json(data)
-
+    const data = JSON.parse(dataText)
+    const decrypted = cookieDecrypt(uuid, data.encrypted, password)
+    return c.json(decrypted)
 })
 
 // 解密函数
