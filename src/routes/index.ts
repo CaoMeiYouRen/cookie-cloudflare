@@ -1,9 +1,10 @@
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs'
 import path from 'path'
 import { Hono } from 'hono'
-import { getRuntimeKey } from 'hono/adapter'
+import { env, getRuntimeKey } from 'hono/adapter'
 import { inflate } from 'pako'
 import CryptoJS from 'crypto-js'
+import { cache } from 'hono/cache'
 import { Bindings } from '../types'
 import logger from '@/middlewares/logger'
 
@@ -68,7 +69,16 @@ app.post('/update', async (c) => {
 })
 
 // 处理数据获取请求
-app.on(['GET', 'POST'], '/get/:uuid', async (c) => {
+app.on(['GET', 'POST'], '/get/:uuid', (c, next) => {
+    const CACHE_MAX_AGE = parseInt(env(c).CACHE_MAX_AGE) || 7200
+    return cache({
+        cacheName: `${c.req.method} /get/:uuid`,
+        cacheControl: `max-age=${CACHE_MAX_AGE}`,
+        // keyGenerator: (c2) => {
+        //     return `${c2.req.url}`
+        // },
+    })(c, next)
+}, async (c) => {
     let body = {} as Record<string, string>
     const contentType = c.req.header('Content-Type')
     if (contentType?.includes('application/x-www-form-urlencoded')) {
@@ -129,22 +139,7 @@ app.on(['GET', 'POST'], '/get/:uuid', async (c) => {
 function cookieDecrypt(uuid: string, encrypted: string, password: string) {
     const the_key = CryptoJS.MD5(`${uuid}-${password}`).toString().substring(0, 16)
     const decrypted = CryptoJS.AES.decrypt(encrypted, the_key).toString(CryptoJS.enc.Utf8)
-    const parsed = JSON.parse(decrypted)
-    return parsed
+    return JSON.parse(decrypted)
 }
-
-// function cookieDecrypt(uuid: string, encrypted: string, password: string) {
-//     // 生成密钥
-//     const the_key = crypto.createHash('md5').update(`${uuid}-${password}`).digest('hex').substring(0, 16);
-
-//     // 解密
-//     const decipher = crypto.createDecipheriv('aes-128-ecb', Buffer.from(the_key, 'utf8'), '');
-//     let decrypted = decipher.update(encrypted, 'base64', 'utf8');
-//     decrypted += decipher.final('utf8');
-
-//     // 解析 JSON
-//     const parsed = JSON.parse(decrypted);
-//     return parsed;
-// }
 
 export default app

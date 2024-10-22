@@ -8,4 +8,5 @@ export type Bindings = {
     TIMEOUT: string
     DB: D1Database
     R2: R2Bucket
+    CACHE_MAX_AGE: string
 }
