@@ -5,6 +5,8 @@ import { env, getRuntimeKey } from 'hono/adapter'
 import { inflate } from 'pako'
 import CryptoJS from 'crypto-js'
 import { cache } from 'hono/cache'
+import { R2GetOptions } from '@cloudflare/workers-types'
+import dayjs from 'dayjs'
 import { Bindings } from '../types'
 import logger from '@/middlewares/logger'
 
@@ -100,7 +102,13 @@ app.on(['GET', 'POST'], '/get/:uuid', (c, next) => {
             return c.text('Internal Server Error', 500)
         }
         try {
-            const object = await r2.get(uuid)
+            // 使用 onlyIf 选项获取最新的对象
+            const options: R2GetOptions = {
+                onlyIf: {
+                    uploadedAfter: dayjs().add(-1, 'day').toDate(),
+                },
+            }
+            const object = await r2.get(uuid, options)
             if (!object) {
                 return c.text('Not Found', 404)
             }
