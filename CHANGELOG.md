@@ -1,5 +1,12 @@
 # cookie-cloudflare
 
+# [1.1.0](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.0.4...v1.1.0) (2024-10-22)
+
+
+### ✨ 新功能
+
+* 新增 缓存配置 ([ec62cd8](https://github.com/CaoMeiYouRen/cookie-cloudflare/commit/ec62cd8))
+
 ## [1.0.4](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.0.3...v1.0.4) (2024-10-21)
 
 
