@@ -1,5 +1,12 @@
 # cookie-cloudflare
 
+## [1.1.1](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.1.0...v1.1.1) (2024-10-22)
+
+
+### 🐛 Bug 修复
+
+* 修复 R2 可能会获取到旧对象的问题 ([032b1c7](https://github.com/CaoMeiYouRen/cookie-cloudflare/commit/032b1c7))
+
 # [1.1.0](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.0.4...v1.1.0) (2024-10-22)
 
 
