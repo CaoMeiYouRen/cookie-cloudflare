@@ -1,5 +1,12 @@
 # cookie-cloudflare
 
+## [1.1.2](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.1.1...v1.1.2) (2024-11-02)
+
+
+### 🐛 Bug 修复
+
+* 更改缓存时间长度 ([8123573](https://github.com/CaoMeiYouRen/cookie-cloudflare/commit/8123573))
+
 ## [1.1.1](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.1.0...v1.1.1) (2024-10-22)
 
 
