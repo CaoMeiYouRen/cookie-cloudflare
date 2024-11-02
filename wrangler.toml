@@ -3,6 +3,8 @@ main = "dist/app.mjs"
 minify = true
 compatibility_date = "2024-10-20"
 compatibility_flags = ["nodejs_compat"]
+[vars]
+CACHE_MAX_AGE = '3600'
 
 [[r2_buckets]]
 binding = "R2"
@@ -16,6 +18,9 @@ minify = false
 [[env.dev.r2_buckets]]
 binding = "R2"
 bucket_name = "cookie-cloudflare"
+
+[env.dev.vars]
+CACHE_MAX_AGE = '600'
 
 [observability]
 enabled = true

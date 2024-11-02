@@ -12,7 +12,7 @@ import logger from '@/middlewares/logger'
 
 const runtime = getRuntimeKey()
 let dataDir: string
-if (runtime !== 'workerd') {
+if (runtime === 'node') {
     // 设置数据目录
     dataDir = path.join(process.cwd(), 'data')
     if (!existsSync(dataDir)) {
@@ -105,7 +105,7 @@ app.on(['GET', 'POST'], '/get/:uuid', (c, next) => {
             // 使用 onlyIf 选项获取最新的对象
             const options: R2GetOptions = {
                 onlyIf: {
-                    uploadedAfter: dayjs().add(-1, 'day').toDate(),
+                    uploadedAfter: dayjs().add(-18, 'hours').toDate(),
                 },
             }
             const object = await r2.get(uuid, options)
