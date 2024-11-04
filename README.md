@@ -33,6 +33,14 @@
 
 ### Cloudflare Workers 部署
 
+#### 一键部署
+
+点击下方的按钮一键前往 Cloudflare Workers 部署
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/CaoMeiYouRen/cookie-cloudflare)
+
+#### 手动部署
+
 1. 创建 `Cloudflare R2 Storage` 
 
 请参考 [Get started](https://developers.cloudflare.com/r2/get-started/) 创建一个 `R2 bucket`
