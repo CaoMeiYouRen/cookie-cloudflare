@@ -1,5 +1,12 @@
 # cookie-cloudflare
 
+## [1.2.2](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.2.1...v1.2.2) (2024-11-06)
+
+
+### 🐛 Bug 修复
+
+* 修复 worker 不支持 crypto.createDecipheriv 的问题 ([b6ad93e](https://github.com/CaoMeiYouRen/cookie-cloudflare/commit/b6ad93e))
+
 ## [1.2.1](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.2.0...v1.2.1) (2024-11-06)
 
 
