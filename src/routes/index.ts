@@ -1,5 +1,7 @@
-import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs'
+import { existsSync, mkdirSync } from 'fs'
 import path from 'path'
+import crypto from 'crypto'
+import { readFile, writeFile } from 'fs-extra'
 import { Hono } from 'hono'
 import { env, getRuntimeKey } from 'hono/adapter'
 import { inflate } from 'pako'
@@ -32,12 +34,13 @@ app.post('/update', async (c) => {
         const decompressedBody = inflate(await c.req.arrayBuffer(), { to: 'string' })
         body = JSON.parse(decompressedBody)// 解析 gzip
     }
-
-    const { encrypted, uuid } = body
+    // type 是加密方式，用于向下兼容
+    // type = 'crypto-js' | 'crypto'
+    const { encrypted, uuid, type } = body
     if (!encrypted || !uuid) {
         return c.text('Bad Request', 400)
     }
-
+    const content = JSON.stringify({ encrypted, type })
     if (runtime === 'workerd') {
         // 如果是 Cloudflare Workers，存储到 R2
         const r2 = c.env.R2
@@ -45,8 +48,6 @@ app.post('/update', async (c) => {
             logger.error('R2 binding is undefined')
             return c.text('Internal Server Error', 500)
         }
-        const content = JSON.stringify({ encrypted })
-
         try {
             await r2.put(uuid, content, {
                 httpMetadata: {
@@ -61,10 +62,9 @@ app.post('/update', async (c) => {
     }
     // 否则，存储到本地 data 文件夹
     const filePath = path.join(dataDir, `${uuid}.json`)
-    const content = JSON.stringify({ encrypted })
-    writeFileSync(filePath, content)
+    await writeFile(filePath, content)
 
-    if (readFileSync(filePath).toString() === content) {
+    if (await readFile(filePath, 'utf-8') === content) {
         return c.json({ action: 'done' })
     }
     return c.json({ action: 'error' })
@@ -88,6 +88,7 @@ app.on(['GET', 'POST'], '/get/:uuid', (c, next) => {
     } else if (contentType?.includes('application/json')) {
         body = await c.req.json()
     }
+
     const { password } = body
     const { uuid } = c.req.param()
     if (!uuid) {
@@ -117,8 +118,14 @@ app.on(['GET', 'POST'], '/get/:uuid', (c, next) => {
                 c.header('Content-Type', 'application/json')
                 return c.text(dataText)
             }
-            const data = JSON.parse(dataText)
-            const decrypted = cookieDecrypt(uuid, data.encrypted, password)
+            // type 是加密方式，用于向下兼容
+            // type = 'crypto-js' | 'crypto'
+            const { type, encrypted } = JSON.parse(dataText)
+            if (type === 'crypto') {
+                const decrypted = cookieDecryptNative(uuid, encrypted, password)
+                return c.json(decrypted)
+            }
+            const decrypted = cookieDecrypt(uuid, encrypted, password)
             return c.json(decrypted)
         } catch (error) {
             console.error(error)
@@ -130,7 +137,7 @@ app.on(['GET', 'POST'], '/get/:uuid', (c, next) => {
     if (!existsSync(filePath)) {
         return c.text('Not Found', 404)
     }
-    const dataText = readFileSync(filePath).toString()
+    const dataText = await readFile(filePath, 'utf-8')
     if (!dataText) {
         return c.text('Internal Server Error', 500)
     }
@@ -138,8 +145,12 @@ app.on(['GET', 'POST'], '/get/:uuid', (c, next) => {
         c.header('Content-Type', 'application/json')
         return c.text(dataText)
     }
-    const data = JSON.parse(dataText)
-    const decrypted = cookieDecrypt(uuid, data.encrypted, password)
+    const { type, encrypted } = JSON.parse(dataText)
+    if (type === 'crypto') {
+        const decrypted = cookieDecryptNative(uuid, encrypted, password)
+        return c.json(decrypted)
+    }
+    const decrypted = cookieDecrypt(uuid, encrypted, password)
     return c.json(decrypted)
 })
 
@@ -147,6 +158,15 @@ app.on(['GET', 'POST'], '/get/:uuid', (c, next) => {
 function cookieDecrypt(uuid: string, encrypted: string, password: string) {
     const the_key = CryptoJS.MD5(`${uuid}-${password}`).toString().substring(0, 16)
     const decrypted = CryptoJS.AES.decrypt(encrypted, the_key).toString(CryptoJS.enc.Utf8)
+    return JSON.parse(decrypted)
+}
+
+// 解密函数 (原生)，效率更高
+function cookieDecryptNative(uuid: string, encrypted: string, password: string) {
+    const the_key = crypto.createHash('md5').update(`${uuid}-${password}`).digest('hex').substring(0, 16)
+    const decipher = crypto.createDecipheriv('aes-128-cbc', the_key, the_key)
+    let decrypted = decipher.update(encrypted, 'base64', 'utf8')
+    decrypted += decipher.final('utf8')
     return JSON.parse(decrypted)
 }
 
