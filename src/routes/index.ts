@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync } from 'fs'
 import path from 'path'
 import crypto from 'crypto'
-import { readFile, writeFile } from 'fs-extra'
+import fs from 'fs-extra'
 import { Hono } from 'hono'
 import { env, getRuntimeKey } from 'hono/adapter'
 import { inflate } from 'pako'
@@ -11,6 +11,8 @@ import { R2GetOptions } from '@cloudflare/workers-types'
 import dayjs from 'dayjs'
 import { Bindings } from '../types'
 import logger from '@/middlewares/logger'
+
+const { writeFile, readFile } = fs
 
 const runtime = getRuntimeKey()
 let dataDir: string
@@ -163,8 +165,9 @@ function cookieDecrypt(uuid: string, encrypted: string, password: string) {
 
 // 解密函数 (原生)，效率更高
 function cookieDecryptNative(uuid: string, encrypted: string, password: string) {
+    const iv = new Uint8Array(16).fill(0)
     const the_key = crypto.createHash('md5').update(`${uuid}-${password}`).digest('hex').substring(0, 16)
-    const decipher = crypto.createDecipheriv('aes-128-cbc', the_key, the_key)
+    const decipher = crypto.createDecipheriv('aes-128-cbc', the_key, iv)
     let decrypted = decipher.update(encrypted, 'base64', 'utf8')
     decrypted += decipher.final('utf8')
     return JSON.parse(decrypted)
