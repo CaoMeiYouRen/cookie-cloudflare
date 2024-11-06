@@ -1,5 +1,12 @@
 # cookie-cloudflare
 
+# [1.2.0](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.1.2...v1.2.0) (2024-11-06)
+
+
+### ✨ 新功能
+
+* 增加 原生 crypto 解密支持 ([ef3ca74](https://github.com/CaoMeiYouRen/cookie-cloudflare/commit/ef3ca74))
+
 ## [1.1.2](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.1.1...v1.1.2) (2024-11-02)
 
 
