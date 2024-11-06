@@ -1,6 +1,6 @@
 {
   "name": "cookie-cloudflare",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "基于 hono 实现的兼容 CookieCloud API 的云函数服务，支持 Cloudflare Workers 部署",
   "author": "CaoMeiYouRen",
   "private": true,

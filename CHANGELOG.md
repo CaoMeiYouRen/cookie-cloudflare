@@ -1,5 +1,12 @@
 # cookie-cloudflare
 
+## [1.2.1](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.2.0...v1.2.1) (2024-11-06)
+
+
+### 🐛 Bug 修复
+
+* 修复 fs 导入错误；修复 crypto 未指定 iv 的问题 ([27f092d](https://github.com/CaoMeiYouRen/cookie-cloudflare/commit/27f092d))
+
 # [1.2.0](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.1.2...v1.2.0) (2024-11-06)
 
 
