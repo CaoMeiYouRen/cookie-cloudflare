@@ -124,7 +124,7 @@ app.on(['GET', 'POST'], '/get/:uuid', (c, next) => {
             // type = 'crypto-js' | 'crypto'
             const { type, encrypted } = JSON.parse(dataText)
             if (type === 'crypto') {
-                const decrypted = cookieDecryptNative(uuid, encrypted, password)
+                const decrypted = await cookieDecryptNative(uuid, encrypted, password)
                 return c.json(decrypted)
             }
             const decrypted = cookieDecrypt(uuid, encrypted, password)
@@ -149,7 +149,7 @@ app.on(['GET', 'POST'], '/get/:uuid', (c, next) => {
     }
     const { type, encrypted } = JSON.parse(dataText)
     if (type === 'crypto') {
-        const decrypted = cookieDecryptNative(uuid, encrypted, password)
+        const decrypted = await cookieDecryptNative(uuid, encrypted, password)
         return c.json(decrypted)
     }
     const decrypted = cookieDecrypt(uuid, encrypted, password)
@@ -163,13 +163,35 @@ function cookieDecrypt(uuid: string, encrypted: string, password: string) {
     return JSON.parse(decrypted)
 }
 
+const AES = {
+    encrypt: async (value: string, key: string, iv?: Uint8Array) => crypto.subtle.encrypt(
+        {
+            name: 'AES-CBC',
+            iv,
+        },
+        await crypto.subtle.importKey('raw', new TextEncoder().encode(key), 'AES-CBC', false, ['encrypt']),
+        new TextEncoder().encode(value),
+    ).then((buff) => Buffer.from(new Uint8Array(buff)).toString('base64'),  // 将结果转换为base64
+    ),
+    decrypt: async (value: string, key: string, iv?: Uint8Array) => {
+        // 从 base64 解码
+        const valueBuff = Buffer.from(value, 'base64')
+        return crypto.subtle.decrypt(
+            {
+                name: 'AES-CBC',
+                iv,
+            },
+            await crypto.subtle.importKey('raw', new TextEncoder().encode(key), 'AES-CBC', false, ['decrypt']),
+            valueBuff,
+        ).then((buff) => Buffer.from(new Uint8Array(buff)).toString())
+    },
+}
+
 // 解密函数 (原生)，效率更高
-function cookieDecryptNative(uuid: string, encrypted: string, password: string) {
+async function cookieDecryptNative(uuid: string, encrypted: string, password: string) {
     const iv = new Uint8Array(16).fill(0)
     const the_key = crypto.createHash('md5').update(`${uuid}-${password}`).digest('hex').substring(0, 16)
-    const decipher = crypto.createDecipheriv('aes-128-cbc', the_key, iv)
-    let decrypted = decipher.update(encrypted, 'base64', 'utf8')
-    decrypted += decipher.final('utf8')
+    const decrypted = await AES.decrypt(encrypted, the_key, iv)
     return JSON.parse(decrypted)
 }
 

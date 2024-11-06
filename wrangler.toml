@@ -15,6 +15,9 @@ bucket_name = "cookie-cloudflare"
 main = "src/app.ts"
 minify = false
 
+compatibility_date = "2024-10-20"
+compatibility_flags = ["nodejs_compat"]
+
 [[env.dev.r2_buckets]]
 binding = "R2"
 bucket_name = "cookie-cloudflare"
