@@ -19,6 +19,10 @@
 
 > 基于 hono 实现的兼容 [CookieCloud](https://github.com/easychen/CookieCloud) API 的云函数服务，支持 [Cloudflare Workers](https://developers.cloudflare.com/workers/) 部署，数据文件存储到 [Cloudflare R2 Storage](https://developers.cloudflare.com/r2/)
 
+`cookie-cloudflare` 支持原生 `crypto` 解密，速度比 `crypto-js` 快数十倍。
+
+由于修改了解密算法，因此前端的加密算法也需要修改，具体请参考本人 Fork 的版本 [CookieCloud](https://github.com/CaoMeiYouRen/CookieCloud)
+
 ## 🏠 主页
 
 [https://github.com/CaoMeiYouRen/cookie-cloudflare#readme](https://github.com/CaoMeiYouRen/cookie-cloudflare#readme)
@@ -27,7 +31,7 @@
 ## 📦 依赖要求
 
 
-- node >=16
+- node >=18
 
 ## 🚀 部署
 
@@ -59,6 +63,10 @@ compatibility_flags = ["nodejs_compat"]
 [[r2_buckets]]
 binding = "R2"
 bucket_name = "cookie-cloudflare" # 修改此处的 bucket_name 为你创建的 R2 bucket 名称
+
+[[kv_namespaces]] # KV 是可选的，用于加速读取。如果你的读取量远大于写入量，建议启用。
+binding = "KV"
+id = "xxxx" # 修改此处的 id 为你创建的 KV 的 id
 ```
 
 3. 构建并部署到 `Cloudflare Workers`
@@ -69,9 +77,9 @@ npm run build && npm run deploy:wrangler
 
 ### Docker 镜像
 
-在通过 Docker 部署的情况下，`cookie-cloudflare` 和 `CookieCloud` 的实现是一样的，因此可以直接使用 `CookieCloud`。
+在通过 Docker 部署的情况下，`cookie-cloudflare` 和 `CookieCloud` 的实现~~是一样的~~~~，因此可以直接使用 `CookieCloud`。~~ **是不一样的。**
 
-但如果你还是想通过 Docker 部署，请参考以下内容。
+通过 Docker 部署，请参考以下内容。
 
 支持两种注册表：
 

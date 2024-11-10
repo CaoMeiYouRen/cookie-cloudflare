@@ -10,6 +10,10 @@ CACHE_MAX_AGE = '3600'
 binding = "R2"
 bucket_name = "cookie-cloudflare"
 
+[[kv_namespaces]]
+binding = "KV"
+id = "2e7369529f5e441fb1159e4a4377aeef"
+
 [env.dev]
 # Development environment configuration
 main = "src/app.ts"
@@ -21,6 +25,10 @@ compatibility_flags = ["nodejs_compat"]
 [[env.dev.r2_buckets]]
 binding = "R2"
 bucket_name = "cookie-cloudflare"
+
+[[env.dev.kv_namespaces]]
+binding = "KV"
+id = "2e7369529f5e441fb1159e4a4377aeef"
 
 [env.dev.vars]
 CACHE_MAX_AGE = '600'

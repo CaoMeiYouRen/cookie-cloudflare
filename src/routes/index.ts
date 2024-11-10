@@ -28,6 +28,7 @@ const app = new Hono<{ Bindings: Bindings }>()
 
 // 处理数据更新请求
 app.post('/update', async (c) => {
+    const CACHE_MAX_AGE = parseInt(env(c).CACHE_MAX_AGE) || 7200
     let body = {} as Record<string, string>
     const contentEncoding = c.req.header('Content-Encoding')
 
@@ -55,7 +56,21 @@ app.post('/update', async (c) => {
                 httpMetadata: {
                     contentType: 'application/json', // 设置文件 Content-Type 为 application/json
                 },
+                customMetadata: {
+                    type,
+                    uploader: 'cookie-cloudflare',
+                },
             })
+            const kv = c.env.KV
+            if (kv) {
+                await kv.put(uuid, content, {
+                    expirationTtl: CACHE_MAX_AGE, // 设置缓存过期时间
+                    metadata: {
+                        type,
+                        uploader: 'cookie-cloudflare',
+                    },
+                }) // 同时存储到 KV 中
+            }
             return c.json({ action: 'done' })
         } catch (error) {
             console.error(error)
@@ -83,6 +98,7 @@ app.on(['GET', 'POST'], '/get/:uuid', (c, next) => {
         // },
     })(c, next)
 }, async (c) => {
+    const CACHE_MAX_AGE = parseInt(env(c).CACHE_MAX_AGE) || 7200
     let body = {} as Record<string, string>
     const contentType = c.req.header('Content-Type')
     if (contentType?.includes('application/x-www-form-urlencoded')) {
@@ -96,50 +112,54 @@ app.on(['GET', 'POST'], '/get/:uuid', (c, next) => {
     if (!uuid) {
         return c.text('Bad Request', 400)
     }
-
+    let dataText = ''
     if (runtime === 'workerd') {
-        // 如果是 Cloudflare Workers，从 R2 获取数据
-        const r2 = c.env.R2
-        if (!r2) {
-            logger.error('R2 binding is undefined')
-            return c.text('Internal Server Error', 500)
+        // 如果是 Cloudflare Workers，先从 KV 获取数据
+        const kv = c.env.KV
+        if (kv) { // 如果 KV 存在
+            dataText = await kv.get(uuid, 'text')
         }
-        try {
-            // 使用 onlyIf 选项获取最新的对象
-            const options: R2GetOptions = {
-                onlyIf: {
-                    uploadedAfter: dayjs().add(-18, 'hours').toDate(),
-                },
+        if (!dataText) {
+            // 如果没有数据，则从 R2 获取数据
+            const r2 = c.env.R2
+            if (!r2) {
+                logger.error('R2 binding is undefined')
+                return c.text('Internal Server Error', 500)
             }
-            const object = await r2.get(uuid, options)
-            if (!object) {
-                return c.text('Not Found', 404)
+            try {
+                // 使用 onlyIf 选项获取最新的对象
+                const options: R2GetOptions = {
+                    onlyIf: {
+                        uploadedAfter: dayjs().add(-24, 'hours').toDate(),
+                    },
+                }
+                const object = await r2.get(uuid, options)
+                if (!object) {
+                    return c.text('Not Found', 404)
+                }
+                dataText = await object.text()
+                if (dataText) {
+                    await kv.put(uuid, dataText, {
+                        expirationTtl: CACHE_MAX_AGE,
+                        metadata: {
+                            uploader: 'cookie-cloudflare',
+                        },
+                    }) // 同时存储到 KV 中
+                }
+            } catch (error) {
+                console.error(error)
+                return c.text('Internal Server Error', 500)
             }
-            const dataText = await object.text()
-            if (!password) {
-                c.header('Content-Type', 'application/json')
-                return c.text(dataText)
-            }
-            // type 是加密方式，用于向下兼容
-            // type = 'crypto-js' | 'crypto'
-            const { type, encrypted } = JSON.parse(dataText)
-            if (type === 'crypto') {
-                const decrypted = await cookieDecryptNative(uuid, encrypted, password)
-                return c.json(decrypted)
-            }
-            const decrypted = cookieDecrypt(uuid, encrypted, password)
-            return c.json(decrypted)
-        } catch (error) {
-            console.error(error)
-            return c.text('Internal Server Error', 500)
         }
+    } else {
+        // 否则，从本地 data 文件夹读取数据
+        const filePath = path.join(dataDir, `${uuid}.json`)
+        if (!existsSync(filePath)) {
+            return c.text('Not Found', 404)
+        }
+        dataText = await readFile(filePath, 'utf-8')
     }
-    // 否则，从本地 data 文件夹读取数据
-    const filePath = path.join(dataDir, `${uuid}.json`)
-    if (!existsSync(filePath)) {
-        return c.text('Not Found', 404)
-    }
-    const dataText = await readFile(filePath, 'utf-8')
+
     if (!dataText) {
         return c.text('Internal Server Error', 500)
     }
@@ -147,6 +167,8 @@ app.on(['GET', 'POST'], '/get/:uuid', (c, next) => {
         c.header('Content-Type', 'application/json')
         return c.text(dataText)
     }
+    // type 是加密方式，用于向下兼容
+    // type = 'crypto-js' | 'crypto'
     const { type, encrypted } = JSON.parse(dataText)
     if (type === 'crypto') {
         const decrypted = await cookieDecryptNative(uuid, encrypted, password)

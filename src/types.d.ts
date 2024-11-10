@@ -1,4 +1,4 @@
-import type { D1Database, R2Bucket } from '@cloudflare/workers-types'
+import type { R2Bucket, KVNamespace } from '@cloudflare/workers-types'
 
 export type Bindings = {
     NODE_ENV: string
@@ -6,7 +6,8 @@ export type Bindings = {
     LOGFILES: string
     LOG_LEVEL: string
     TIMEOUT: string
-    DB: D1Database
-    R2: R2Bucket
     CACHE_MAX_AGE: string
+
+    R2: R2Bucket
+    KV: KVNamespace
 }
