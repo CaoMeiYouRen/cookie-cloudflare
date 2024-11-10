@@ -1,5 +1,12 @@
 # cookie-cloudflare
 
+# [1.3.0](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.2.2...v1.3.0) (2024-11-10)
+
+
+### ✨ 新功能
+
+* 添加 Cloudflare Workers KV 缓存支持 ([fe5a13f](https://github.com/CaoMeiYouRen/cookie-cloudflare/commit/fe5a13f))
+
 ## [1.2.2](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.2.1...v1.2.2) (2024-11-06)
 
 
