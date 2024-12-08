@@ -4,7 +4,7 @@ minify = true
 compatibility_date = "2024-10-20"
 compatibility_flags = ["nodejs_compat"]
 [vars]
-CACHE_MAX_AGE = '3600'
+CACHE_MAX_AGE = '1800'
 
 [[r2_buckets]]
 binding = "R2"
@@ -31,7 +31,7 @@ binding = "KV"
 id = "2e7369529f5e441fb1159e4a4377aeef"
 
 [env.dev.vars]
-CACHE_MAX_AGE = '600'
+CACHE_MAX_AGE = '300'
 
 [observability]
 enabled = true

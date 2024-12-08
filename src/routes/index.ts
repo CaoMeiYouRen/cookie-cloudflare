@@ -138,7 +138,7 @@ app.on(['GET', 'POST'], '/get/:uuid', (c, next) => {
                     return c.text('Not Found', 404)
                 }
                 dataText = await object.text()
-                if (dataText) {
+                if (dataText && kv) {
                     await kv.put(uuid, dataText, {
                         expirationTtl: CACHE_MAX_AGE,
                         metadata: {
