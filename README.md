@@ -1,10 +1,13 @@
 <h1 align="center">cookie-cloudflare </h1>
 <p>
   <img alt="Version" src="https://img.shields.io/github/package-json/v/CaoMeiYouRen/cookie-cloudflare.svg" />
+  <a href="https://hub.docker.com/r/caomeiyouren/cookie-cloudflare" target="_blank">
+    <img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/caomeiyouren/cookie-cloudflare">
+  </a>
   <a href="https://github.com/CaoMeiYouRen/cookie-cloudflare/actions?query=workflow%3ARelease" target="_blank">
     <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/CaoMeiYouRen/cookie-cloudflare/release.yml?branch=master">
   </a>
-  <img src="https://img.shields.io/badge/node-%3E%3D16-blue.svg" />
+  <img src="https://img.shields.io/badge/node-%3E%3D18-blue.svg" />
   <a href="https://github.com/CaoMeiYouRen/cookie-cloudflare#readme" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
