@@ -1,5 +1,12 @@
 # cookie-cloudflare
 
+# [1.4.0](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.3.1...v1.4.0) (2024-12-14)
+
+
+### ✨ 新功能
+
+* 添加 Bun 运行时支持；添加 Docker 支持；优化 CI 流程；优化 Docker 镜像最小化脚本；支持 Bun 运行时数据目录设置 ([45cd3d9](https://github.com/CaoMeiYouRen/cookie-cloudflare/commit/45cd3d9))
+
 ## [1.3.1](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.3.0...v1.3.1) (2024-12-08)
 
 
