@@ -135,12 +135,31 @@ cd cookie-cloudflare
 # 安装依赖
 pnpm i --frozen-lockfile
 # 构建项目
-pnpm build
+pnpm run build
 # 启动项目
-pnpm start
+pnpm run start
 ```
 
 在浏览器中打开 `http://{Server IP}:3000` 即可查看结果
+
+### Bun 部署
+
+确保本地已安装 [bun](https://bun.sh/)
+
+```sh
+# 下载源码
+git clone https://github.com/CaoMeiYouRen/cookie-cloudflare.git  --depth=1
+cd cookie-cloudflare
+# 安装依赖
+bun install
+# 构建项目
+bun run build
+# 启动项目
+bun run start:bun
+```
+
+在浏览器中打开 `http://{Server IP}:3000` 即可查看结果
+
 
 ### Vercel 部署(暂不支持)
 

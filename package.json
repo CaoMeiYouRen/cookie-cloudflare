@@ -30,6 +30,7 @@
     "dev:tsup": "cross-env NODE_ENV=development tsup --watch",
     "start": "node ./dist/index.mjs",
     "start:tsx": "cross-env NODE_ENV=production tsx src/index.ts",
+    "start:bun": "bun ./dist/app.mjs",
     "commit": "cz",
     "prepare": "husky install",
     "dev:vercel": "vercel dev",
