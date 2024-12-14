@@ -100,6 +100,7 @@ jobs:
             ghcr.io/${{ github.repository }}
             registry.cn-hangzhou.aliyuncs.com/${{ github.repository }}
           tags: |
+            type=semver,priority=1100,pattern=bun-{{version}},value=${{env.GIT_TAG}},enable=true
             type=raw,value=bun-latest,enable=true
             type=raw,value=bun-{{date 'YYYY-MM-DD' tz='Asia/Shanghai'}},enable=true
             type=sha,format=short,prefix=bun-sha-,enable=true
