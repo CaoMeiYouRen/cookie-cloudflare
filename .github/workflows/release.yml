@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 # 仅取消针对当前工作流正在进行的作业或运行
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -30,18 +31,6 @@ jobs:
         with:
           node-version: "lts/*"
           cache: "pnpm"
-      - name: Cache Dependency
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.npm
-            ~/.yarn
-            ~/.cache/pnpm
-            ~/cache
-            !~/cache/exclude
-            **/node_modules
-          key: pnpm-${{ runner.os }}-${{ hashFiles('package.json') }}
-          restore-keys: pnpm-${{ runner.os }}
       - run: pnpm i --frozen-lockfile
       - run: pnpm run lint
       - run: pnpm run build
@@ -86,7 +75,7 @@ jobs:
             ghcr.io/${{ github.repository }}
             registry.cn-hangzhou.aliyuncs.com/${{ github.repository }}
           tags: |
-            type=match,priority=1100,pattern=\d.\d.\d,value=${{env.GIT_TAG}},enable=true
+            type=semver,priority=1100,pattern={{version}},value=${{env.GIT_TAG}},enable=true
             type=raw,value=latest,enable=true
             type=raw,value={{date 'YYYY-MM-DD' tz='Asia/Shanghai'}},enable=true
             type=sha,format=short,prefix=sha-,enable=true
@@ -101,4 +90,27 @@ jobs:
           push: true
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+      - name: Extract Docker metadata for bun
+        id: metadata-bun
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ github.repository }}
+            ghcr.io/${{ github.repository }}
+            registry.cn-hangzhou.aliyuncs.com/${{ github.repository }}
+          tags: |
+            type=raw,value=bun-latest,enable=true
+            type=raw,value=bun-{{date 'YYYY-MM-DD' tz='Asia/Shanghai'}},enable=true
+            type=sha,format=short,prefix=bun-sha-,enable=true
+          flavor: latest=false
+      - name: Build and push Docker images for bun
+        uses: docker/build-push-action@v5
+        if: ${{ env.GIT_TAG }}
+        with:
+          context: .
+          file: ./Dockerfile.bun
+          push: true
+          tags: ${{ steps.metadata-bun.outputs.tags }}
+          labels: ${{ steps.metadata-bun.outputs.labels }}
           platforms: linux/amd64,linux/arm64

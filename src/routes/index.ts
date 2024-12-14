@@ -16,7 +16,7 @@ const { writeFile, readFile } = fs
 
 const runtime = getRuntimeKey()
 let dataDir: string
-if (runtime === 'node') {
+if (runtime === 'node' || runtime === 'bun') {
     // 设置数据目录
     dataDir = path.join(process.cwd(), 'data')
     if (!existsSync(dataDir)) {

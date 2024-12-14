@@ -20,7 +20,7 @@ const { nodeFileTrace } = require('@vercel/nft');
     if (!mainPath) {
         process.exit(1)
     }
-    const files = [mainPath]
+    const files = [mainPath, 'dist/app.mjs']
     console.log('Start analyzing, project root:', projectRoot)
     const { fileList: fileSet } = await nodeFileTrace(files, {
         base: projectRoot,
