@@ -1,5 +1,12 @@
 # cookie-cloudflare
 
+## [1.3.1](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.3.0...v1.3.1) (2024-12-08)
+
+
+### 🐛 Bug 修复
+
+* **routes:** 修复缓存条件判断；更新缓存最大时间配置 ([08a89d0](https://github.com/CaoMeiYouRen/cookie-cloudflare/commit/08a89d0))
+
 # [1.3.0](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.2.2...v1.3.0) (2024-11-10)
 
 
