@@ -1,5 +1,12 @@
 # cookie-cloudflare
 
+## [1.4.1](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.4.0...v1.4.1) (2025-04-03)
+
+
+### 🐛 Bug 修复
+
+* 修改缓存时间设置为3600秒；更新依赖项配置 ([5977c1c](https://github.com/CaoMeiYouRen/cookie-cloudflare/commit/5977c1c))
+
 # [1.4.0](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.3.1...v1.4.0) (2024-12-14)
 
 
