@@ -28,7 +28,7 @@ const app = new Hono<{ Bindings: Bindings }>()
 
 // 处理数据更新请求
 app.post('/update', async (c) => {
-    const CACHE_MAX_AGE = parseInt(env(c).CACHE_MAX_AGE) || 7200
+    const CACHE_MAX_AGE = parseInt(env(c).CACHE_MAX_AGE) || 3600
     let body = {} as Record<string, string>
     const contentEncoding = c.req.header('Content-Encoding')
 
