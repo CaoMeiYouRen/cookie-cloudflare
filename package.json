@@ -106,7 +106,7 @@
     "@hono/node-server": "^1.13.2",
     "await-to-js": "^3.0.0",
     "crypto-js": "^4.2.0",
-    "dayjs": "^1.11.13",
+    "dayjs": "^1.11.19",
     "dotenv": "^16.4.5",
     "fs-extra": "^11.2.0",
     "hono": "^4.6.5",
