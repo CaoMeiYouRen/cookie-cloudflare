@@ -103,7 +103,7 @@
   },
   "dependencies": {
     "@cloudflare/workers-types": "^4.20241018.0",
-    "@hono/node-server": "^1.13.2",
+    "@hono/node-server": "^1.19.9",
     "await-to-js": "^3.0.0",
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.19",
