@@ -67,9 +67,11 @@ compatibility_flags = ["nodejs_compat"]
 binding = "R2"
 bucket_name = "cookie-cloudflare" # 修改此处的 bucket_name 为你创建的 R2 bucket 名称
 
-[[kv_namespaces]] # KV 是可选的，用于加速读取。如果你的读取量远大于写入量，建议启用。
-binding = "KV"
-id = "xxxx" # 修改此处的 id 为你创建的 KV 的 id
+[vars]
+BASE_URL = "" # 必填。你的服务器基础 URL，例如 https://cookie.cmyr.ltd。用于刷新缓存
+CLOUDFLARE_ZONE_ID = "" # 刷新缓存必填。Cloudflare Zone ID
+CLOUDFLARE_API_KEY = "" # 刷新缓存必填。Cloudflare API Key
+CLOUDFLARE_EMAIL = "" # 刷新缓存必填。Cloudflare Email
 ```
 
 3. 构建并部署到 `Cloudflare Workers`

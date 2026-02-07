@@ -1,4 +1,4 @@
-import type { R2Bucket, KVNamespace } from '@cloudflare/workers-types'
+import type { R2Bucket } from '@cloudflare/workers-types'
 
 export type Bindings = {
     NODE_ENV: string
@@ -7,7 +7,10 @@ export type Bindings = {
     LOG_LEVEL: string
     TIMEOUT: string
     CACHE_MAX_AGE: string
+    BASE_URL: string
+    CLOUDFLARE_ZONE_ID: string
+    CLOUDFLARE_API_KEY: string
+    CLOUDFLARE_EMAIL: string
 
     R2: R2Bucket
-    KV: KVNamespace
 }

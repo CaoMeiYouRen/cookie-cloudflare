@@ -2,13 +2,11 @@ import { existsSync, mkdirSync } from 'fs'
 import path from 'path'
 import crypto from 'crypto'
 import fs from 'fs-extra'
-import { Hono } from 'hono'
+import { Hono, Context } from 'hono'
 import { env, getRuntimeKey } from 'hono/adapter'
 import { inflate } from 'pako'
 import CryptoJS from 'crypto-js'
 import { cache } from 'hono/cache'
-import { R2GetOptions } from '@cloudflare/workers-types'
-import dayjs from 'dayjs'
 import { Bindings } from '../types'
 import logger from '@/middlewares/logger'
 
@@ -61,16 +59,26 @@ app.post('/update', async (c) => {
                     uploader: 'cookie-cloudflare',
                 },
             })
-            const kv = c.env.KV
-            if (kv) {
-                await kv.put(uuid, content, {
-                    expirationTtl: CACHE_MAX_AGE, // 设置缓存过期时间
-                    metadata: {
-                        type,
-                        uploader: 'cookie-cloudflare',
-                    },
-                }) // 同时存储到 KV 中
+
+            // 刷新缓存
+            const baseUrl = env(c).BASE_URL
+            if (baseUrl) {
+                const purgeUrl = new URL(`/get/${uuid}`, baseUrl).toString()
+                await cloudflarePurgeCache(c, [purgeUrl])
+
+                // 尝试清除 Workers Cache API
+                try {
+                    if (typeof caches !== 'undefined') {
+                        const getCache = await caches.open('GET /get/:uuid')
+                        await getCache.delete(new Request(purgeUrl))
+                        const postCache = await caches.open('POST /get/:uuid')
+                        await postCache.delete(new Request(purgeUrl, { method: 'POST' }))
+                    }
+                } catch (error) {
+                    logger.error(`Workers Cache purge error: ${error}`)
+                }
             }
+
             return c.json({ action: 'done' })
         } catch (error) {
             console.error(error)
@@ -114,42 +122,21 @@ app.on(['GET', 'POST'], '/get/:uuid', (c, next) => {
     }
     let dataText = ''
     if (runtime === 'workerd') {
-        // 如果是 Cloudflare Workers，先从 KV 获取数据
-        const kv = c.env.KV
-        if (kv) { // 如果 KV 存在
-            dataText = await kv.get(uuid, 'text')
+        // 如果是 Cloudflare Workers，从 R2 获取数据
+        const r2 = c.env.R2
+        if (!r2) {
+            logger.error('R2 binding is undefined')
+            return c.text('Internal Server Error', 500)
         }
-        if (!dataText) {
-            // 如果没有数据，则从 R2 获取数据
-            const r2 = c.env.R2
-            if (!r2) {
-                logger.error('R2 binding is undefined')
-                return c.text('Internal Server Error', 500)
+        try {
+            const object = await r2.get(uuid)
+            if (!object) {
+                return c.text('Not Found', 404)
             }
-            try {
-                // 使用 onlyIf 选项获取最新的对象
-                const options: R2GetOptions = {
-                    onlyIf: {
-                        uploadedAfter: dayjs().add(-24, 'hours').toDate(),
-                    },
-                }
-                const object = await r2.get(uuid, options)
-                if (!object) {
-                    return c.text('Not Found', 404)
-                }
-                dataText = await object.text()
-                if (dataText && kv) {
-                    await kv.put(uuid, dataText, {
-                        expirationTtl: CACHE_MAX_AGE,
-                        metadata: {
-                            uploader: 'cookie-cloudflare',
-                        },
-                    }) // 同时存储到 KV 中
-                }
-            } catch (error) {
-                console.error(error)
-                return c.text('Internal Server Error', 500)
-            }
+            dataText = await object.text()
+        } catch (error) {
+            console.error(error)
+            return c.text('Internal Server Error', 500)
         }
     } else {
         // 否则，从本地 data 文件夹读取数据
@@ -215,6 +202,35 @@ async function cookieDecryptNative(uuid: string, encrypted: string, password: st
     const the_key = crypto.createHash('md5').update(`${uuid}-${password}`).digest('hex').substring(0, 16)
     const decrypted = await AES.decrypt(encrypted, the_key, iv)
     return JSON.parse(decrypted)
+}
+
+/**
+ * 刷新 Cloudflare 缓存
+ * @param c
+ * @param files
+ * @returns
+ */
+async function cloudflarePurgeCache(c: Context<{ Bindings: Bindings }>, files: string[]) {
+    const { CLOUDFLARE_ZONE_ID, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL } = env(c)
+    if (!CLOUDFLARE_ZONE_ID || !CLOUDFLARE_API_KEY || !CLOUDFLARE_EMAIL) {
+        return
+    }
+    try {
+        const url = `https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/purge_cache`
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-Auth-Email': CLOUDFLARE_EMAIL,
+                'X-Auth-Key': CLOUDFLARE_API_KEY,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ files }),
+        })
+        const result = await response.json()
+        logger.info(`Cloudflare cache purge result: ${JSON.stringify(result)}`)
+    } catch (error) {
+        logger.error(`Cloudflare cache purge error: ${error}`)
+    }
 }
 
 export default app
