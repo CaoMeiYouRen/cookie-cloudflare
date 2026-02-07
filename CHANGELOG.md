@@ -1,5 +1,12 @@
 # cookie-cloudflare
 
+# [1.5.0](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.4.1...v1.5.0) (2026-02-07)
+
+
+### ✨ 新功能
+
+* 添加 Cloudflare 缓存刷新功能；更新配置项以支持新变量 ([ef69717](https://github.com/CaoMeiYouRen/cookie-cloudflare/commit/ef69717))
+
 ## [1.4.1](https://github.com/CaoMeiYouRen/cookie-cloudflare/compare/v1.4.0...v1.4.1) (2025-04-03)
 
 
