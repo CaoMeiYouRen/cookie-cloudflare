@@ -54,7 +54,7 @@
     "@vercel/nft": "^0.27.4",
     "commitizen": "^4.3.1",
     "conventional-changelog-cli": "^5.0.0",
-    "conventional-changelog-cmyr-config": "^2.1.2",
+    "conventional-changelog-cmyr-config": "^3.0.0",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
     "cz-conventional-changelog-cmyr": "^1.1.1",

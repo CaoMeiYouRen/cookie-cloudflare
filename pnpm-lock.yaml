@@ -100,8 +100,8 @@ importers:
         specifier: ^5.0.0
         version: 5.0.0(conventional-commits-filter@4.0.0)
       conventional-changelog-cmyr-config:
-        specifier: ^2.1.2
-        version: 2.1.2
+        specifier: ^3.0.0
+        version: 3.0.0
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
@@ -1584,9 +1584,9 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  conventional-changelog-cmyr-config@2.1.2:
-    resolution: {integrity: sha512-JucNefNoVC1StkGTSKeFRZgOLOsXnmqd3CoaxoI1QPZ093slTdhQrt1doTARJKzvmL+4RL80LiSRneH1mdRSmw==}
-    engines: {node: '>=12'}
+  conventional-changelog-cmyr-config@3.0.0:
+    resolution: {integrity: sha512-QhD/0545XRgspCcopi2d5L8ffFdiqsaqqcQfGRprv18CVH0NUQUtfORpbNqEOWwl1VxYj1pZUcVyxHTSfam1Xg==}
+    engines: {node: '>=18'}
 
   conventional-changelog-codemirror@5.0.0:
     resolution: {integrity: sha512-8gsBDI5Y3vrKUCxN6Ue8xr6occZ5nsDEc4C7jO/EovFGozx8uttCAyfhRrvoUAWi2WMm3OmYs+0mPJU7kQdYWQ==}
@@ -6447,11 +6447,10 @@ snapshots:
     transitivePeerDependencies:
       - conventional-commits-filter
 
-  conventional-changelog-cmyr-config@2.1.2:
+  conventional-changelog-cmyr-config@3.0.0:
     dependencies:
       compare-func: 2.0.0
       debug: 4.3.7
-      q: 1.5.1
     transitivePeerDependencies:
       - supports-color
 
