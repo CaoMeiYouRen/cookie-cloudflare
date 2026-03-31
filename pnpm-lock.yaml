@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       '@cloudflare/workers-types':
-        specifier: ^4.20260228.1
-        version: 4.20260228.1
+        specifier: ^4.20260331.1
+        version: 4.20260331.1
       '@hono/node-server':
         specifier: ^1.19.9
         version: 1.19.9(hono@4.12.3)
@@ -149,7 +149,7 @@ importers:
         version: 50.25.4(rollup@4.57.1)(typescript@5.9.3)
       wrangler:
         specifier: ^4.63.0
-        version: 4.63.0(@cloudflare/workers-types@4.20260228.1)
+        version: 4.63.0(@cloudflare/workers-types@4.20260331.1)
 
 packages:
 
@@ -223,8 +223,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@cloudflare/workers-types@4.20260228.1':
-    resolution: {integrity: sha512-gTpLuST3b1gdQfp+u1yiMavoE+n1g1CXuHeiDtlChOePVje+R/V92k6JeEY+6o9qVmQpHzluMe9j/OwvRJuCUg==}
+  '@cloudflare/workers-types@4.20260331.1':
+    resolution: {integrity: sha512-fsf+MWPQdQ8XPV0y3tQvqf035ETgEXfJgNTYqmiLcOHB32eH/5Kb75fyZIXS9nnBMq3x6c4+HJRTRxbovNLWiA==}
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
@@ -2118,6 +2118,7 @@ packages:
   conventional-changelog-cli@5.0.0:
     resolution: {integrity: sha512-9Y8fucJe18/6ef6ZlyIlT2YQUbczvoQZZuYmDLaGvcSBP+M6h+LAvf7ON7waRxKJemcCII8Yqu5/8HEfskTxJQ==}
     engines: {node: '>=18'}
+    deprecated: This package is no longer maintained. Please use the conventional-changelog package instead.
     hasBin: true
 
   conventional-changelog-cmyr-config@3.0.0:
@@ -2901,16 +2902,19 @@ packages:
   git-raw-commits@2.0.11:
     resolution: {integrity: sha512-VnctFhw+xfj8Va1xtfEqCUD2XDrbAPSJx+hSrE5K7fGdjZruW7XV+QOrN7LF/RJyvspRiD2I0asWsxFp0ya26A==}
     engines: {node: '>=10'}
+    deprecated: This package is no longer maintained. For the JavaScript API, please use @conventional-changelog/git-client instead.
     hasBin: true
 
   git-raw-commits@5.0.0:
     resolution: {integrity: sha512-I2ZXrXeOc0KrCvC7swqtIFXFN+rbjnC7b2T943tvemIOVNl+XP8YnA9UVwqFhzzLClnSA60KR/qEjLpXzs73Qg==}
     engines: {node: '>=18'}
+    deprecated: This package is no longer maintained. For the JavaScript API, please use @conventional-changelog/git-client instead.
     hasBin: true
 
   git-semver-tags@8.0.0:
     resolution: {integrity: sha512-N7YRIklvPH3wYWAR2vysaqGLPRcpwQ0GKdlqTiVN5w1UmCdaeY3K8s6DMKRCh54DDdzyt/OAB6C8jgVtb7Y2Fg==}
     engines: {node: '>=18'}
+    deprecated: This package is no longer maintained. For the JavaScript API, please use @conventional-changelog/git-client instead.
     hasBin: true
 
   glob-parent@5.1.2:
@@ -5421,7 +5425,7 @@ snapshots:
   '@cloudflare/workerd-windows-64@1.20260205.0':
     optional: true
 
-  '@cloudflare/workers-types@4.20260228.1': {}
+  '@cloudflare/workers-types@4.20260331.1': {}
 
   '@colors/colors@1.5.0':
     optional: true
@@ -11026,7 +11030,7 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20260205.0
       '@cloudflare/workerd-windows-64': 1.20260205.0
 
-  wrangler@4.63.0(@cloudflare/workers-types@4.20260228.1):
+  wrangler@4.63.0(@cloudflare/workers-types@4.20260331.1):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.2
       '@cloudflare/unenv-preset': 2.12.0(unenv@2.0.0-rc.24)(workerd@1.20260205.0)
@@ -11037,7 +11041,7 @@ snapshots:
       unenv: 2.0.0-rc.24
       workerd: 1.20260205.0
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20260228.1
+      '@cloudflare/workers-types': 4.20260331.1
       fsevents: 2.3.3
     transitivePeerDependencies:
       - bufferutil
