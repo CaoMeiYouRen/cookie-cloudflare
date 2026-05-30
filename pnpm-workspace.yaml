@@ -1,0 +1,16 @@
+packages:
+  - .
+
+strictPeerDependencies: false
+
+overrides:
+  compare-func: ^2.0.0
+
+onlyBuiltDependencies:
+  - esbuild
+  - workerd
+
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true
