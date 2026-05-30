@@ -105,7 +105,13 @@ jobs:
       - run: bun install
       - run: bun run lint
       - run: bun run build
-      - run: bun test
+      - name: Run bun tests if present
+        run: |
+          if find . -type f \( -name "*.test.*" -o -name "*_test_*" -o -name "*.spec.*" -o -name "*_spec_*" \) | grep -q .; then
+            bun test
+          else
+            echo "No Bun tests found, skipping."
+          fi
   bun-build:
     needs: bun-test # 等待 test 执行成功
     runs-on: ubuntu-latest
