@@ -180,7 +180,7 @@ const AES = {
         },
         await crypto.subtle.importKey('raw', new TextEncoder().encode(key), 'AES-CBC', false, ['encrypt']),
         new TextEncoder().encode(value),
-    ).then((buff) => Buffer.from(new Uint8Array(buff)).toString('base64'),  // 将结果转换为base64
+    ).then((buff) => Buffer.from(new Uint8Array(buff)).toString('base64'), // 将结果转换为base64
     ),
     decrypt: async (value: string, key: string, iv?: Uint8Array) => {
         // 从 base64 解码

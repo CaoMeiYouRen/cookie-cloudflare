@@ -37,8 +37,10 @@ app.all('/runtime', (c) => c.json({
 
 app.route('/', routes)
 
-__DEV__ && showRoutes(app, {
-    verbose: true,
-})
+if (__DEV__) {
+    showRoutes(app, {
+        verbose: true,
+    })
+}
 
 export default app
