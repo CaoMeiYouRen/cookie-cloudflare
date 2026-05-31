@@ -95,7 +95,7 @@
     "url": "https://github.com/CaoMeiYouRen/cookie-cloudflare/issues"
   },
   "dependencies": {
-    "@cloudflare/workers-types": "^4.20260530.1",
+    "@cloudflare/workers-types": "^4.20260531.1",
     "@hono/node-server": "^2.0.4",
     "await-to-js": "^3.0.0",
     "crypto-js": "^4.2.0",
