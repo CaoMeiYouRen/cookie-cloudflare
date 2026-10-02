@@ -41,3 +41,5 @@ temp
 .wrangler
 .dev.vars
 /data
+# dependfix
+dependfix-reports/

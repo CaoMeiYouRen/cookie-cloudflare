@@ -1,28 +1,26 @@
 packages:
   - .
-
 strictPeerDependencies: false
-
 overrides:
   compare-func: ^2.0.0
-
+  undici@6: ^6.28.1
+  undici@7: ^7.29.1
+  ip-address: ^10.5.1
 onlyBuiltDependencies:
   - esbuild
   - workerd
-
 allowBuilds:
   esbuild: true
   sharp: true
   workerd: true
-
 minimumReleaseAgeExclude:
-  - '@cloudflare/workers-types@4.20260530.1'
-  - '@commitlint/cli@21.0.2'
-  - '@commitlint/is-ignored@21.0.2'
-  - '@commitlint/lint@21.0.2'
-  - '@commitlint/load@21.0.2'
-  - '@commitlint/message@21.0.2'
-  - '@commitlint/parse@21.0.2'
-  - '@commitlint/read@21.0.2'
-  - '@commitlint/rules@21.0.2'
-  - '@commitlint/top-level@21.0.2'
+  - "@cloudflare/workers-types@4.20260530.1"
+  - "@commitlint/cli@21.0.2"
+  - "@commitlint/is-ignored@21.0.2"
+  - "@commitlint/lint@21.0.2"
+  - "@commitlint/load@21.0.2"
+  - "@commitlint/message@21.0.2"
+  - "@commitlint/parse@21.0.2"
+  - "@commitlint/read@21.0.2"
+  - "@commitlint/rules@21.0.2"
+  - "@commitlint/top-level@21.0.2"
