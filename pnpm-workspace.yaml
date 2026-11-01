@@ -3,8 +3,8 @@ packages:
 strictPeerDependencies: false
 overrides:
   compare-func: ^2.0.0
-  undici@6: ^6.28.1
-  undici@7: ^7.29.1
+  undici@6: ^6.29.1
+  undici@7: ^7.30.1
   ip-address: ^10.5.1
   ansi-regex@4: ^4.1.1
   ansi-regex@5: ^5.0.1
