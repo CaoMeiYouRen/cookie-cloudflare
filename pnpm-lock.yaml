@@ -30,8 +30,8 @@ importers:
         specifier: ^5.20261028.1
         version: 5.20261028.1
       '@hono/node-server':
-        specifier: ^2.1.5
-        version: 2.1.5(hono@4.13.14)
+        specifier: ^2.1.6
+        version: 2.1.6(hono@4.13.14)
       await-to-js:
         specifier: ^3.0.0
         version: 3.0.0
@@ -92,7 +92,7 @@ importers:
         version: 3.0.0
       '@vercel/nft':
         specifier: ^1.5.0
-        version: 1.11.0(rollup@4.63.6)(supports-color@10.0.0)
+        version: 1.11.0(rollup@4.66.0)(supports-color@10.0.0)
       commitizen:
         specifier: ^4.3.1
         version: 4.3.2(@types/node@26.6.6)(typescript@6.0.3)
@@ -580,8 +580,8 @@ packages:
     resolution: {integrity: sha512-JUFJad5lv7jxj926GPgymrWQxxjPYuJNiNjNMzqT+HiuP6Vl3dk5xzG+8sTX96np0ZAluvaMzPsjhHZ5rNuNQQ==}
     engines: {node: '>=14'}
 
-  '@hono/node-server@2.1.5':
-    resolution: {integrity: sha512-MgP/I06GdvsilDspMk/qmRzpk8LOUStP6jFAbSRi40W09DhoyUn+Mj7eyKICPqeYKybOjVFLVIAQzvu1bfIa7Q==}
+  '@hono/node-server@2.1.6':
+    resolution: {integrity: sha512-p/KH9MnfNcsm3sR6x4lNgm5j+QN4Et8srKredl9DZfXiyZ1UQ3aQ2YVpFLbqktYN5JI+DB+VZFKM2PqE5hLKjQ==}
     engines: {node: '>=20'}
     peerDependencies:
       hono: ^4 || ^5.0.0-0
@@ -5563,7 +5563,7 @@ snapshots:
 
   '@fastify/busboy@2.0.0': {}
 
-  '@hono/node-server@2.1.5(hono@4.13.14)':
+  '@hono/node-server@2.1.6(hono@4.13.14)':
     dependencies:
       hono: 4.13.14
 
@@ -6092,14 +6092,6 @@ snapshots:
     optional: true
 
   '@rolldown/pluginutils@1.0.0-rc.1': {}
-
-  '@rollup/pluginutils@5.4.0(rollup@4.63.6)':
-    dependencies:
-      '@types/estree': 1.0.9
-      estree-walker: 2.0.2
-      picomatch: 4.0.7
-    optionalDependencies:
-      rollup: 4.63.6
 
   '@rollup/pluginutils@5.4.0(rollup@4.66.0)':
     dependencies:
@@ -6849,10 +6841,10 @@ snapshots:
       - rollup
       - supports-color
 
-  '@vercel/nft@1.11.0(rollup@4.63.6)(supports-color@10.0.0)':
+  '@vercel/nft@1.11.0(rollup@4.66.0)(supports-color@10.0.0)':
     dependencies:
       '@mapbox/node-pre-gyp': 2.0.0(supports-color@10.0.0)
-      '@rollup/pluginutils': 5.4.0(rollup@4.63.6)
+      '@rollup/pluginutils': 5.4.0(rollup@4.66.0)
       acorn: 8.18.0
       acorn-import-attributes: 1.9.5(acorn@8.18.0)
       async-sema: 3.1.1
